@@ -11,12 +11,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public Article deleteArticle(Long id) {
         Article article = getById(id);
-        if(article != null) {
-            article.setDeleted(1);
-            updateById(article);
-            article = getById(id);
-        }
+        article.setDeleted(1);
+        updateById(article);
 
-        return article;
+        return getById(id);
     }
 }

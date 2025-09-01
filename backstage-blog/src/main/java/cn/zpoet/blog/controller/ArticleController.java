@@ -20,12 +20,14 @@ public class ArticleController {
     private final SnowflakeIdGenerator snowflakeIdGenerator;
 
     @PostMapping("/add")
-    public Result<Article> addArticle(Article article) {
-        article.setId(snowflakeIdGenerator.nextId());
+    public Result<Article> addArticle(@RequestBody Article article) {
+        Long id = snowflakeIdGenerator.nextId();
+        article.setId(id);
         article.setCreatedTime(LocalDateTime.now());
         article.setLastUpdatedTime(LocalDateTime.now());
         articleService.save(article);
-        return Result.success(article);
+        Article newArticle = articleService.getById(id);
+        return Result.success(newArticle);
     }
 
     @GetMapping("/{id}")
@@ -46,8 +48,8 @@ public class ArticleController {
         article.setId(id);
         article.setLastUpdatedTime(LocalDateTime.now());
         articleService.updateById(article);
-        article = articleService.getById(id);
-        return Result.success(article);
+        Article newArticle = articleService.getById(id);
+        return Result.success(newArticle);
     }
 
     @DeleteMapping("/{id}")
